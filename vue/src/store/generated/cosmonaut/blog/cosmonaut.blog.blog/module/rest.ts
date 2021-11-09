@@ -9,7 +9,10 @@
  * ---------------------------------------------------------------
  */
 
-export type BlogMsgCreatePostResponse = object;
+export interface BlogMsgCreatePostResponse {
+  /** @format uint64 */
+  id?: string;
+}
 
 export interface ProtobufAny {
   "@type"?: string;

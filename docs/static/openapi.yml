@@ -12504,6 +12504,10 @@ paths:
 definitions:
   cosmonaut.blog.blog.MsgCreatePostResponse:
     type: object
+    properties:
+      id:
+        type: string
+        format: uint64
   google.protobuf.Any:
     type: object
     properties:

@@ -1,6 +1,8 @@
 import { txClient, queryClient, MissingWalletError } from './module';
 // @ts-ignore
 import { SpVuexError } from '@starport/vuex';
+import { Post } from "./module/types/blog/post";
+export { Post };
 async function initTxClient(vuexGetters) {
     return await txClient(vuexGetters['common/wallet/signer'], {
         addr: vuexGetters['common/env/apiTendermint']
@@ -34,7 +36,9 @@ function getStructure(template) {
 }
 const getDefaultState = () => {
     return {
-        _Structure: {},
+        _Structure: {
+            Post: getStructure(Post.fromPartial({})),
+        },
         _Subscriptions: new Set(),
     };
 };
