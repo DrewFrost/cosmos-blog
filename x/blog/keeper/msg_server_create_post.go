@@ -3,8 +3,9 @@ package keeper
 import (
 	"context"
 
-	"github.com/cosmonaut/blog/x/blog/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/cosmonaut/blog/x/blog/types"
 )
 
 func (k msgServer) CreatePost(goCtx context.Context, msg *types.MsgCreatePost) (*types.MsgCreatePostResponse, error) {
@@ -19,5 +20,5 @@ func (k msgServer) CreatePost(goCtx context.Context, msg *types.MsgCreatePost) (
 
 	id := k.AppendPost(ctx, post)
 
-	return &types.MsgCreatePostResponse{}, nil
+	return &types.MsgCreatePostResponse{Id: id}, nil
 }

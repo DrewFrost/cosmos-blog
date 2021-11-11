@@ -134,4 +134,22 @@ export class HttpClient {
  * @version version not set
  */
 export class Api extends HttpClient {
+    constructor() {
+        super(...arguments);
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryPosts
+         * @summary Queries a list of posts items.
+         * @request GET:/cosmonaut/blog/blog/posts
+         */
+        this.queryPosts = (query, params = {}) => this.request({
+            path: `/cosmonaut/blog/blog/posts`,
+            method: "GET",
+            query: query,
+            format: "json",
+            ...params,
+        });
+    }
 }

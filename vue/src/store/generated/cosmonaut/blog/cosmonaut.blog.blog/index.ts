@@ -43,6 +43,7 @@ function getStructure(template) {
 
 const getDefaultState = () => {
 	return {
+				Posts: {},
 				
 				_Structure: {
 						Post: getStructure(Post.fromPartial({})),
@@ -73,6 +74,12 @@ export default {
 		}
 	},
 	getters: {
+				getPosts: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.Posts[JSON.stringify(params)] ?? {}
+		},
 				
 		getTypeStructure: (state) => (type) => {
 			return state._Structure[type].fields
@@ -102,6 +109,31 @@ export default {
 				}
 			})
 		},
+		
+		
+		
+		 		
+		
+		
+		async QueryPosts({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params: {...key}, query=null }) {
+			try {
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryPosts(query)).data
+				
+					
+				while (all && (<any> value).pagination && (<any> value).pagination.nextKey!=null) {
+					let next_values=(await queryClient.queryPosts({...query, 'pagination.key':(<any> value).pagination.nextKey})).data
+					value = mergeResults(value, next_values);
+				}
+				commit('QUERY', { query: 'Posts', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryPosts', payload: { options: { all }, params: {...key},query }})
+				return getters['getPosts']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new SpVuexError('QueryClient:QueryPosts', 'API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
 		
 		async sendMsgCreatePost({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
